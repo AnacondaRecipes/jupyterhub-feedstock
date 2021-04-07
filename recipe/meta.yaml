@@ -11,7 +11,7 @@ source:
 
 build:
   number: 0
-  skip: true  # [py<35]
+  skip: true  # [py<36]
   script: python -m pip install --no-deps --ignore-installed .
 
 requirements:
@@ -36,6 +36,7 @@ requirements:
     - sqlalchemy >=1.1
     - tornado >=5.0
     - traitlets >=4.3.2
+    - jupyter_telemetry
 
 test:
   imports:

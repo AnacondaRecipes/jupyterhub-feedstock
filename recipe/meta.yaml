@@ -1,7 +1,7 @@
 {% set version = "1.4.0" %}
 
 package:
-  name: jupyterhub
+  name: jupyterhub-feedstock
   version: {{ version }}
 
 source:
@@ -11,48 +11,90 @@ source:
 
 build:
   number: 0
-  skip: true  # [py<35]
-  script: python -m pip install --no-deps --ignore-installed .
+  skip: true  # [py<36]
 
 requirements:
   host:
     - python
-    - pip
   run:
     - python
-    - alembic
-    - async_generator >=1.8
-    - certipy>=0.1.2
-    - configurable-http-proxy
-    - entrypoints
-    - jinja2
-    - oauthlib>=3.0
-    - pamela  # [not win]
-    - prometheus_client >=0.0.21
-    - psutil  # [win]
-    - pycurl
-    - python-dateutil
-    - requests
-    - sqlalchemy >=1.1
-    - tornado >=5.0
-    - traitlets >=4.3.2
 
-test:
-  imports:
-    - jupyterhub
-    - jupyterhub.apihandlers
-    - jupyterhub.handlers
-    - jupyterhub.tests
-    - jupyterhub.app
-  commands:
-    - python -m jupyterhub --help-all
+outputs:
+  - name: jupyterhub-base
+    build:
+      script: python -m pip install . --no-deps -vv
+    requirements:
+      host:
+        - python
+        - pip
+      run:
+        - python
+        - alembic
+        - async_generator >=1.9
+        - certipy >=0.1.2
+        - entrypoints
+        - jinja2 >=2.11.0
+        - jupyter_telemetry >=0.1.0
+        - oauthlib >=3.0
+        - pamela  # [not win]
+        - prometheus_client >=0.4.0
+        - psutil  # [win]
+        - pycurl
+        - python-dateutil
+        - requests
+        - sqlalchemy >=1.1
+        - tornado >=5.1
+        - traitlets >=4.3.2
+
+    test:
+      imports:
+        - jupyterhub
+        - jupyterhub.apihandlers
+        - jupyterhub.handlers
+        - jupyterhub.tests
+        - jupyterhub.app
+      commands:
+        - python -m jupyterhub --help-all
+
+  - name: jupyterhub-singleuser
+    requirements:
+      host:
+        - python
+      run:
+        - python
+        - {{ pin_subpackage("jupyterhub-base", exact=True) }}
+        - notebook >=4
+    test:
+      imports:
+        - jupyterhub.singleuser
+      commands:
+        - python -m jupyterhub.singleuser --help-all
+
+  - name: jupyterhub
+    requirements:
+      host:
+        - python
+      run:
+        - python
+        - {{ pin_subpackage("jupyterhub-base", exact=True) }}
+        - configurable-http-proxy >=4
+        - nodejs >=12
+    test:
+      imports:
+        - jupyterhub
+      commands:
+        - python -m jupyterhub --help-all
+        - configurable-http-proxy --help
 
 about:
   home: https://github.com/jupyterhub/jupyterhub
-  license: BSD 3-Clause
+  license: BSD-3-Clause
   license_file: COPYING.md
   summary: Multi-user server for Jupyter notebooks
 
 extra:
   recipe-maintainers:
     - minrk
+    - blink1073
+    - consideRatio
+    - manics

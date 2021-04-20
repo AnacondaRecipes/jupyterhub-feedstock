@@ -12,6 +12,7 @@ source:
 build:
   number: 0
   skip: true  # [py<36]
+  skip: true  # [win32]
 
 requirements:
   host:

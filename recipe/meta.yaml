@@ -11,7 +11,10 @@ source:
 
 build:
   number: 0
-  skip: true  # [py<36]
+  # 6/2/2021: Win32 platform has unsatisfiable dependencies
+  # JupyterHub officially does not support Windows,
+  # see https://jupyterhub.readthedocs.io/en/stable/installation-basics.html#platform-support
+  skip: true  # [py<36 or win32]
   script: python -m pip install --no-deps --ignore-installed .
   entry_points:
     - jupyterhub = jupyterhub.app:main

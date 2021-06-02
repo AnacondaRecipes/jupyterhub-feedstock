@@ -11,7 +11,7 @@ source:
 
 build:
   number: 0
-  skip: true  # [py<35]
+  skip: true  # [py<36]
   script: python -m pip install --no-deps --ignore-installed .
   entry_points:
     - jupyterhub = jupyterhub.app:main
@@ -50,12 +50,20 @@ test:
     - jupyterhub.handlers
     - jupyterhub.tests
     - jupyterhub.app
+  requires:
+    - jupyterhub
+    - configurable-http-proxy
   commands:
     - python -m jupyterhub --help-all
+    - jupyterhub -h
+    - configurable-http-proxy -h
 
 about:
   home: https://github.com/jupyterhub/jupyterhub
-  license: BSD 3-Clause
+  dev_url: https://github.com/jupyterhub/jupyterhub
+  doc_url: https://jupyterhub.readthedocs.io/en/stable/index.html
+  license: BSD-3-Clause
+  license_family: BSD
   license_file: COPYING.md
   summary: Multi-user server for Jupyter notebooks
 

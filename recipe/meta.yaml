@@ -10,7 +10,7 @@ source:
   sha256: d72908b3063fed1d35a3aa793c4a7ded2c8c4016b38e0135b33af0be49a8fc21
 
 build:
-  number: 0
+  number: 1
   # 6/2/2021: Win32 platform has unsatisfiable dependencies
   # JupyterHub officially does not support Windows,
   # see https://jupyterhub.readthedocs.io/en/stable/installation-basics.html#platform-support

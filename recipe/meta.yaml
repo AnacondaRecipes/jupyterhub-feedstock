@@ -22,12 +22,12 @@ build:
 
 requirements:
   host:
-    - python >=3.6
+    - python
     - pip
     - setuptools
     - wheel
   run:
-    - python >=3.6
+    - python
     - alembic >=1.4
     - async_generator >=1.9
     - certipy >=0.1.2

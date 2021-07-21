@@ -56,7 +56,9 @@ test:
   requires:
     - jupyterhub
     - configurable-http-proxy
+    - pip
   commands:
+    - pip check
     - python -m jupyterhub --help-all
     - jupyterhub -h
     - configurable-http-proxy -h

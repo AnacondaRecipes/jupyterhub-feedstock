@@ -11,10 +11,10 @@ source:
 
 build:
   number: 0
-  # 6/2/2021: Win32 platform has unsatisfiable dependencies
+  # 2021/6/2: Win32 platform has unsatisfiable dependencies
   # JupyterHub officially does not support Windows,
   # see https://jupyterhub.readthedocs.io/en/stable/installation-basics.html#platform-support
-  # This package isn't included in SOW Packages list, and there isn't configurable-http-proxy >=4.0.0 on s390x
+  # 2021/12/15: This package isn't included in SOW Packages list, and there isn't configurable-http-proxy >=4.0.0 on s390x
   skip: true  # [win32 or s390x]
   noarch: python
   script: python -m pip install --no-deps --ignore-installed .
@@ -35,12 +35,13 @@ requirements:
     - certipy >=0.1.2
     - configurable-http-proxy >=4.0.0
     - entrypoints
-    - jinja2 >=2.11.0,<3.0.0
+    - jinja2 >=2.11.0
     - jupyter_telemetry >=0.1.0
     - oauthlib >=3.0
+    - packaging
     - pamela
     - prometheus_client >=0.4.0
-    - psutil
+    - psutil >=5.6.5
     - pycurl
     - python-dateutil
     - requests

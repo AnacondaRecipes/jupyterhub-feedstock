@@ -14,7 +14,9 @@ build:
   # 6/2/2021: Win32 platform has unsatisfiable dependencies
   # JupyterHub officially does not support Windows,
   # see https://jupyterhub.readthedocs.io/en/stable/installation-basics.html#platform-support
-  skip: true  # [win32]
+  # This package isn't included in SOW Packages list, and there isn't configurable-http-proxy >=4.0.0 on s390x
+  skip: true  # [win32 or s390x]
+  noarch: python
   script: python -m pip install --no-deps --ignore-installed .
   entry_points:
     - jupyterhub = jupyterhub.app:main
@@ -27,24 +29,24 @@ requirements:
     - setuptools
     - wheel
   run:
-    - python
+    - python >=3.6
     - alembic >=1.4
     - async_generator >=1.9
     - certipy >=0.1.2
-    - configurable-http-proxy
+    - configurable-http-proxy >=4.0.0
     - entrypoints
     - jinja2 >=2.11.0,<3.0.0
+    - jupyter_telemetry >=0.1.0
     - oauthlib >=3.0
-    - pamela  # [not win]
+    - pamela
     - prometheus_client >=0.4.0
-    - psutil  # [win]
+    - psutil
     - pycurl
     - python-dateutil
     - requests
     - sqlalchemy >=1.1
     - tornado >=5.1
     - traitlets >=4.3.2
-    - jupyter_telemetry >=0.1.0
 
 test:
   imports:
@@ -62,6 +64,10 @@ test:
     - python -m jupyterhub --help-all
     - jupyterhub -h
     - configurable-http-proxy -h
+    - test -f $PREFIX/share/jupyterhub/templates/page.html
+    - test -f $PREFIX/share/jupyterhub/static/components/jquery/dist/jquery.min.js
+    - test -f $PREFIX/share/jupyterhub/static/css/style.min.css
+    - test -f $PREFIX/share/jupyterhub/static/js/home.js
 
 about:
   home: https://github.com/jupyterhub/jupyterhub

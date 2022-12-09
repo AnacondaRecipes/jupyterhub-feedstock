@@ -14,7 +14,7 @@ build:
   # 6/2/2021: Win32 platform has unsatisfiable dependencies
   # JupyterHub officially does not support Windows,
   # see https://jupyterhub.readthedocs.io/en/stable/installation-basics.html#platform-support
-  skip: true  # [win32]
+  skip: true  # [win32 and linuxs390x]
   script: python -m pip install --no-deps --ignore-installed .
   entry_points:
     - jupyterhub = jupyterhub.app:main
@@ -32,7 +32,7 @@ requirements:
     - importlib-metadata >=3.6
     - async_generator >=1.9
     - certipy >=0.1.2
-    - configurable-http-proxy >=4
+    - configurable-http-proxy
     - entrypoints
     - jinja2 >=2.11.0,<3.0.0
     - oauthlib >=3.0

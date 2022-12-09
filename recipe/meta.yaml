@@ -1,4 +1,4 @@
-{% set version = "1.4.2" %}
+{% set version = "3.1.0" %}
 
 package:
   name: jupyterhub
@@ -7,7 +7,7 @@ package:
 source:
   fn: jupyterhub-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-{{ version }}.tar.gz
-  sha256: d72908b3063fed1d35a3aa793c4a7ded2c8c4016b38e0135b33af0be49a8fc21
+  sha256: eaf8735c32efd05c00aecc860b953f731af559d6e046b621b1802f850475626f
 
 build:
   number: 0
@@ -29,6 +29,7 @@ requirements:
   run:
     - python
     - alembic >=1.4
+    - importlib-metadata >=3.6
     - async_generator >=1.9
     - certipy >=0.1.2
     - configurable-http-proxy
@@ -41,11 +42,13 @@ requirements:
     - pycurl
     - python-dateutil
     - requests
+    - packaging
     - sqlalchemy >=1.1
     - tornado >=5.1
     - traitlets >=4.3.2
     - jupyter_telemetry >=0.1.0
-
+  run_constrained:
+    - psutil >=5.6.5
 test:
   imports:
     - jupyterhub
@@ -65,6 +68,8 @@ test:
 
 about:
   home: https://github.com/jupyterhub/jupyterhub
+  description: |
+    With JupyterHub you can create a multi-user Hub that spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server.
   dev_url: https://github.com/jupyterhub/jupyterhub
   doc_url: https://jupyterhub.readthedocs.io/en/stable/index.html
   license: BSD-3-Clause
@@ -75,3 +80,7 @@ about:
 extra:
   recipe-maintainers:
     - minrk
+    - blink1073
+    - consideRatio
+    - manics
+    - bollwyvl

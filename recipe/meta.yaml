@@ -29,7 +29,7 @@ requirements:
   run:
     - python
     - alembic >=1.4
-    - importlib-metadata >=3.6
+    - importlib-metadata >=3.6. # [py<310]
     - async_generator >=1.9
     - certipy >=0.1.2
     - configurable-http-proxy

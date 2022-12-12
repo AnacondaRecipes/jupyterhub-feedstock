@@ -45,7 +45,8 @@ requirements:
     - tornado >=5.1
     - traitlets >=4.3.2
     - jupyter_telemetry >=0.1.0
-
+   run_constrained:
+    - psutil >=5.6.5
 test:
   imports:
     - jupyterhub

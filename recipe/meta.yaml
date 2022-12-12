@@ -26,7 +26,7 @@ requirements:
     - pip
     - setuptools
     - wheel
-    run:
+  run:
     - python
     - alembic >=1.4
     - importlib-metadata >=3.6

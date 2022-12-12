@@ -33,6 +33,8 @@ requirements:
     - async_generator >=1.9
     - certipy >=0.1.2
     - configurable-http-proxy
+    - entrypoints
+    - pycurl
     - jinja2 >=2.11.0,<3.0.0
     - oauthlib >=3.0
     - pamela  # [not win]

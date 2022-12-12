@@ -33,13 +33,11 @@ requirements:
     - async_generator >=1.9
     - certipy >=0.1.2
     - configurable-http-proxy
-    - entrypoints
     - jinja2 >=2.11.0,<3.0.0
     - oauthlib >=3.0
     - pamela  # [not win]
     - prometheus_client >=0.4.0
-    - psutil  # [win]
-    - pycurl
+    - psutil >= 5.6.5  # [win]
     - python-dateutil
     - requests
     - packaging
@@ -47,8 +45,7 @@ requirements:
     - tornado >=5.1
     - traitlets >=4.3.2
     - jupyter_telemetry >=0.1.0
-  run_constrained:
-    - psutil >=5.6.5
+
 test:
   imports:
     - jupyterhub

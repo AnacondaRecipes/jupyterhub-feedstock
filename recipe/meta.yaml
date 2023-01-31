@@ -33,7 +33,7 @@ requirements:
     - async_generator >=1.9
     - certipy >=0.1.2
     - configurable-http-proxy
-    - jinja2 >=2.11.0,<3.0.0
+    - jinja2 >=2.11.0
     - oauthlib >=3.0
     - pamela  # [not win]
     - prometheus_client >=0.4.0

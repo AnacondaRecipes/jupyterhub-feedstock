@@ -1,4 +1,4 @@
-{% set version = "3.1.0" %}
+{% set version = "3.1.1" %}
 
 package:
   name: jupyterhub
@@ -7,14 +7,14 @@ package:
 source:
   fn: jupyterhub-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-{{ version }}.tar.gz
-  sha256: eaf8735c32efd05c00aecc860b953f731af559d6e046b621b1802f850475626f
+  sha256: bfdbc55d7cd29ed2b2c84d2fc7943ad13efdfc4a77740519c5dad1079ff75953
 
 build:
   number: 0
   # 6/2/2021: Win32 platform has unsatisfiable dependencies
   # JupyterHub officially does not support Windows,
   # see https://jupyterhub.readthedocs.io/en/stable/installation-basics.html#platform-support
-  skip: true  # [win32 or s390x]
+  skip: true  # [s390x]
   script: python -m pip install --no-deps --ignore-installed .
   entry_points:
     - jupyterhub = jupyterhub.app:main
@@ -33,7 +33,7 @@ requirements:
     - async_generator >=1.9
     - certipy >=0.1.2
     - configurable-http-proxy
-    - jinja2 >=2.11.0,<3.0.0
+    - jinja2 >=2.11.0
     - oauthlib >=3.0
     - pamela  # [not win]
     - prometheus_client >=0.4.0

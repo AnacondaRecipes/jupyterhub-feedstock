@@ -1,7 +1,7 @@
 {% set version = "4.0.2" %}
 
 package:
-  name: jupyterhub
+  name: jupyterhub-split
   version: {{ version }}
 
 source:

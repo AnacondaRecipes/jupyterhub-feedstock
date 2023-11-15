@@ -1,74 +1,111 @@
-{% set version = "3.1.1" %}
+{% set version = "4.0.2" %}
 
 package:
   name: jupyterhub
   version: {{ version }}
 
 source:
-  fn: jupyterhub-{{ version }}.tar.gz
   url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-{{ version }}.tar.gz
-  sha256: bfdbc55d7cd29ed2b2c84d2fc7943ad13efdfc4a77740519c5dad1079ff75953
+  sha256: d4e450eed8d90dfbcf0eca08f00f2093a0bce74dc51f7cfc0b7057f602341a1d
 
 build:
   number: 0
-  # 6/2/2021: Win32 platform has unsatisfiable dependencies
-  # JupyterHub officially does not support Windows,
-  # see https://jupyterhub.readthedocs.io/en/stable/installation-basics.html#platform-support
-  skip: true  # [s390x]
-  script: python -m pip install --no-deps --ignore-installed .
-  entry_points:
-    - jupyterhub = jupyterhub.app:main
-    - jupyterhub-singleuser = jupyterhub.singleuser:main
+  skip: true  # [py<37 or s390x]
 
-requirements:
-  host:
-    - python
-    - pip
-    - setuptools
-    - wheel
-  run:
-    - python
-    - alembic >=1.4
-    - importlib_metadata >=3.6  # [py<310]
-    - async_generator >=1.9
-    - certipy >=0.1.2
-    - configurable-http-proxy
-    - jinja2 >=2.11.0
-    - oauthlib >=3.0
-    - pamela  # [not win]
-    - prometheus_client >=0.4.0
-    - psutil >=5.6.5 # [win]
-    - python-dateutil
-    - requests
-    - packaging
-    - sqlalchemy >=1.1
-    - tornado >=5.1
-    - traitlets >=4.3.2
-    - jupyter_telemetry >=0.1.0
+outputs:
+  - name: jupyterhub-base
+    script: build-base.sh   # [unix]
+    script: build-base.bat  # [win]
+    build:
+      skip: true  # [py<37 or s390x]
+      entry_points:
+        - jupyterhub = jupyterhub.app:main
+        - jupyterhub-singleuser = jupyterhub.singleuser:main
+    requirements:
+      host:
+        - python
+        - pip
+        - setuptools
+        - wheel
+      run:
+        - python
+        - alembic >=1.4
+        - importlib_metadata >=3.6  # [py<310]
+        - async_generator >=1.9
+        - certipy >=0.1.2
+        - jinja2 >=2.11.0
+        - oauthlib >=3.0
+        - pamela  # [not win]
+        - prometheus_client >=0.4.0
+        - psutil >=5.6.5 # [win]
+        - python-dateutil
+        - requests
+        - packaging
+        - sqlalchemy >=1.4
+        - tornado >=5.1
+        - traitlets >=4.3.2
+        - jupyter_telemetry >=0.1.0
+        - pycurl # tornado uses pycurl by default, if available
+    test:
+      imports:
+        - jupyterhub
+        - jupyterhub.apihandlers
+        - jupyterhub.handlers
+        - jupyterhub.tests
+        - jupyterhub.app
+      requires:
+        - pip
+      commands:
+        - pip check
+        - python -m jupyterhub --help-all
+        - jupyterhub -h
 
-test:
-  imports:
-    - jupyterhub
-    - jupyterhub.apihandlers
-    - jupyterhub.handlers
-    - jupyterhub.tests
-    - jupyterhub.app
-  requires:
-    - jupyterhub
-    - configurable-http-proxy
-    - pip
-  commands:
-    - pip check
-    - python -m jupyterhub --help-all
-    - jupyterhub -h
-    - configurable-http-proxy -h
+  - name: jupyterhub-singleuser
+    build:
+      skip: true  # [py<37 or s390x]
+    requirements:
+      host:
+        - python
+      run:
+        - {{ pin_subpackage("jupyterhub-base", exact=True) }}
+        - jupyterlab >=3,<5
+        - python
+    test:
+      requires:
+        - pip
+      imports:
+        - jupyterhub.singleuser
+      commands:
+        - pip check
+        - jupyterhub-singleuser --help-all
+
+  - name: jupyterhub
+    build:
+      skip: true  # [py<37 or s390x]
+    requirements:
+      host:
+        - python
+      run:
+        - {{ pin_subpackage("jupyterhub-base", exact=True) }}
+        - configurable-http-proxy
+        - nodejs >=12
+        - python
+    test:
+      requires:
+        - pip
+      imports:
+        - jupyterhub
+      commands:
+        - pip check
+        - jupyterhub --help-all
+        - configurable-http-proxy --help
 
 about:
   home: https://github.com/jupyterhub/jupyterhub
   description: |
     With JupyterHub you can create a multi-user Hub that spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server.
   dev_url: https://github.com/jupyterhub/jupyterhub
-  doc_url: https://jupyterhub.readthedocs.io/en/stable/index.html
+  doc_url: https://jupyterhub.readthedocs.io
   license: BSD-3-Clause
   license_family: BSD
   license_file: COPYING.md

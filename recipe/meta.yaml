@@ -1,4 +1,4 @@
-{% set version = "4.0.2" %}
+{% set version = "5.2.1" %}
 
 package:
   name: jupyterhub-split
@@ -6,18 +6,18 @@ package:
 
 source:
   url: https://pypi.io/packages/source/j/jupyterhub/jupyterhub-{{ version }}.tar.gz
-  sha256: d4e450eed8d90dfbcf0eca08f00f2093a0bce74dc51f7cfc0b7057f602341a1d
+  sha256: 5b35444c2c254e60563887d1d59c2376813d16a166ec6e0a410c773cdbd37ebd
 
 build:
   number: 0
-  skip: true  # [py<37 or s390x]
+  skip: true  # [py<38 or s390x]
 
 outputs:
   - name: jupyterhub-base
     script: build-base.sh   # [unix]
     script: build-base.bat  # [win]
     build:
-      skip: true  # [py<37 or s390x]
+      skip: true  # [py<38 or s390x]
       entry_points:
         - jupyterhub = jupyterhub.app:main
     requirements:
@@ -25,31 +25,37 @@ outputs:
         - python
         - pip
         - setuptools
+        - setuptools_scm
         - wheel
       run:
         - python
         - alembic >=1.4
-        - importlib_metadata >=3.6  # [py<310]
-        - async_generator >=1.9
+        - async_generator >=1.9  # [py<310]
         - certipy >=0.1.2
+        - idna
+        - importlib_metadata >=3.6  # [py<310]
         - jinja2 >=2.11.0
+        - jupyter_events
         - oauthlib >=3.0
-        - pamela  # [not win]
-        - prometheus_client >=0.4.0
-        - psutil >=5.6.5 # [win]
+        - packaging
+        - pamela >=1.1.0  # [not win]
+        - prometheus_client >=0.5.0
+        - psutil >=5.6.5  # [win]
+        - pydantic >=2
         - python-dateutil
         - requests
-        - packaging
-        - sqlalchemy >=1.4
+        - sqlalchemy >=1.4.1
         - tornado >=5.1
         - traitlets >=4.3.2
-        - jupyter_telemetry >=0.1.0
-        - pycurl # tornado uses pycurl by default, if available
+        - pycurl  # tornado uses pycurl by default, if available
     test:
       imports:
         - jupyterhub
+        - jupyterhub.alembic
         - jupyterhub.apihandlers
         - jupyterhub.handlers
+        - jupyterhub.oauth
+        - jupyterhub.services
         - jupyterhub.tests
         - jupyterhub.app
       requires:
@@ -58,10 +64,12 @@ outputs:
         - pip check
         - python -m jupyterhub --help-all
         - jupyterhub -h
+        # Need playwright to run test suite.
+        # - pytest -vvv --pyargs jupyterhub.tests
 
   - name: jupyterhub-singleuser
     build:
-      skip: true  # [py<37 or s390x]
+      skip: true  # [py<38 or s390x]
       entry_points:
         - jupyterhub-singleuser = jupyterhub.singleuser:main
     requirements:
@@ -82,7 +90,7 @@ outputs:
 
   - name: jupyterhub
     build:
-      skip: true  # [py<37 or s390x]
+      skip: true  # [py<38 or s390x]
     requirements:
       host:
         - python

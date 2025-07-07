@@ -10,21 +10,21 @@ source:
 
 build:
   number: 0
-  skip: true  # [py<38 or s390x]
+  skip: true  # [py<38]
 
 outputs:
   - name: jupyterhub-base
     script: build-base.sh  # [unix]
     script: build-base.bat  # [win]
     build:
-      skip: true  # [py<38 or s390x]
+      skip: true  # [py<38]
       entry_points:
         - jupyterhub = jupyterhub.app:main
     requirements:
       host:
         - python
         - pip
-        - setuptools
+        - setuptools >=61
         - setuptools_scm
         - wheel
       run:
@@ -64,11 +64,21 @@ outputs:
         - pip check
         - python -m jupyterhub --help-all
         - jupyterhub -h
+        - jupyterhub --version
+        - test -f $PREFIX/share/jupyterhub/templates/page.html  # [unix]
+        - test -f $PREFIX/share/jupyterhub/static/components/jquery/dist/jquery.min.js  # [unix]
+        - test -f $PREFIX/share/jupyterhub/static/css/style.min.css  # [unix]
+        - test -f $PREFIX/share/jupyterhub/static/js/home.js  # [unix]
+        - dir %PREFIX%\share\jupyterhub\templates\page.html                         || exit 1  # [win]
+        - dir %PREFIX%\share\jupyterhub\static\components\jquery\dist\jquery.min.js || exit 1  # [win]
+        - dir %PREFIX%\share\jupyterhub\static\css\style.min.css                    || exit 1  # [win]
+        - dir %PREFIX%\share\jupyterhub\static\js\home.js                           || exit 1  # [win]
         # Need playwright to run test suite.
         # - pytest -vvv --pyargs jupyterhub.tests
+        
   - name: jupyterhub-singleuser
     build:
-      skip: true  # [py<38 or s390x]
+      skip: true  # [py<38]
       entry_points:
         - jupyterhub-singleuser = jupyterhub.singleuser:main
     requirements:
@@ -86,9 +96,10 @@ outputs:
       commands:
         - pip check
         - jupyterhub-singleuser --help-all
+
   - name: jupyterhub
     build:
-      skip: true  # [py<38 or s390x]
+      skip: true  # [py<38]
     requirements:
       host:
         - python
@@ -115,7 +126,13 @@ about:
   doc_url: https://jupyterhub.readthedocs.io
   license: BSD-3-Clause
   license_family: BSD
-  license_file: COPYING.md
+  license_file:
+    - LICENSE
+    - share/jupyterhub/static/components/@fortawesome/fontawesome-free/LICENSE.txt
+    - share/jupyterhub/static/components/bootstrap/LICENSE
+    - share/jupyterhub/static/components/jquery/LICENSE.txt
+    - share/jupyterhub/static/components/moment/LICENSE
+    - share/jupyterhub/static/js/admin-react.js.LICENSE.txt
   summary: Multi-user server for Jupyter notebooks
 
 extra:

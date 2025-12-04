@@ -117,20 +117,13 @@ outputs:
         - configurable-http-proxy --help
 
 about:
-  home: https://github.com/jupyterhub/jupyterhub
-  description: |
-    With JupyterHub you can create a multi-user Hub that spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server.
+  home: https://hub.jupyter.org
+  description: With JupyterHub you can create a multi-user Hub that spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server.
   dev_url: https://github.com/jupyterhub/jupyterhub
   doc_url: https://jupyterhub.readthedocs.io
   license: BSD-3-Clause
   license_family: BSD
-  license_file:
-    - LICENSE
-    - share/jupyterhub/static/components/@fortawesome/fontawesome-free/LICENSE.txt
-    - share/jupyterhub/static/components/bootstrap/LICENSE
-    - share/jupyterhub/static/components/jquery/LICENSE.txt
-    - share/jupyterhub/static/components/moment/LICENSE
-    - share/jupyterhub/static/js/admin-react.js.LICENSE.txt
+  license_file: LICENSE
   summary: Multi-user server for Jupyter notebooks
 
 extra:

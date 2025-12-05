@@ -104,7 +104,7 @@ outputs:
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - configurable-http-proxy
-        - nodejs >=12
+        - nodejs >=18
         - python
     test:
       requires:

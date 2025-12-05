@@ -1,4 +1,4 @@
-{% set version = "5.3.0" %}
+{% set version = "5.4.2" %}
 
 package:
   name: jupyterhub-split
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/j/jupyterhub/jupyterhub-{{ version }}.tar.gz
-  sha256: 57834b36e7db8f26f21d9aeba1e1d5b8c91b9ff14a7c144097178977aa1e723f
+  sha256: acd50f9880c916affe9cddb11be39581fbf5f74971104691f87ef213340d817a
 
 build:
   number: 0
@@ -52,12 +52,26 @@ outputs:
       imports:
         - jupyterhub
         - jupyterhub.alembic
-        - jupyterhub.apihandlers
-        - jupyterhub.handlers
-        - jupyterhub.oauth
-        - jupyterhub.services
-        - jupyterhub.tests
         - jupyterhub.app
+        - jupyterhub.apihandlers
+        - jupyterhub.auth
+        - jupyterhub.authenticators
+        - jupyterhub.handlers
+        - jupyterhub.log
+        - jupyterhub.metrics
+        - jupyterhub.oauth
+        - jupyterhub.objects
+        - jupyterhub.orm
+        - jupyterhub.roles
+        - jupyterhub.services
+        - jupyterhub.scopes
+        - jupyterhub.spawner
+        - jupyterhub.tests
+        - jupyterhub.traitlets
+        - jupyterhub.utils
+        - jupyterhub._data
+        - jupyterhub._memoize
+        - jupyterhub._version
       requires:
         - pip
       commands:
@@ -75,7 +89,6 @@ outputs:
         - dir %PREFIX%\share\jupyterhub\static\js\home.js                           || exit 1  # [win]
         # Need playwright to run test suite.
         # - pytest -vvv --pyargs jupyterhub.tests
-        
   - name: jupyterhub-singleuser
     build:
       skip: true  # [py<38]
@@ -96,7 +109,6 @@ outputs:
       commands:
         - pip check
         - jupyterhub-singleuser --help-all
-
   - name: jupyterhub
     build:
       skip: true  # [py<38]
@@ -106,7 +118,8 @@ outputs:
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - configurable-http-proxy
-        - nodejs >=12
+        # NodeJS version specified >=12 (node_min in upstream), raising to 18 for security/EOL.
+        - nodejs >=18
         - python
     test:
       requires:
@@ -119,20 +132,13 @@ outputs:
         - configurable-http-proxy --help
 
 about:
-  home: https://github.com/jupyterhub/jupyterhub
-  description: |
-    With JupyterHub you can create a multi-user Hub that spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server.
+  home: https://hub.jupyter.org
+  description: With JupyterHub you can create a multi-user Hub that spawns, manages, and proxies multiple instances of the single-user Jupyter notebook server.
   dev_url: https://github.com/jupyterhub/jupyterhub
   doc_url: https://jupyterhub.readthedocs.io
   license: BSD-3-Clause
   license_family: BSD
-  license_file:
-    - LICENSE
-    - share/jupyterhub/static/components/@fortawesome/fontawesome-free/LICENSE.txt
-    - share/jupyterhub/static/components/bootstrap/LICENSE
-    - share/jupyterhub/static/components/jquery/LICENSE.txt
-    - share/jupyterhub/static/components/moment/LICENSE
-    - share/jupyterhub/static/js/admin-react.js.LICENSE.txt
+  license_file: LICENSE
   summary: Multi-user server for Jupyter notebooks
 
 extra:

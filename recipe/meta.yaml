@@ -52,12 +52,26 @@ outputs:
       imports:
         - jupyterhub
         - jupyterhub.alembic
-        - jupyterhub.apihandlers
-        - jupyterhub.handlers
-        - jupyterhub.oauth
-        - jupyterhub.services
-        - jupyterhub.tests
         - jupyterhub.app
+        - jupyterhub.apihandlers
+        - jupyterhub.auth
+        - jupyterhub.authenticators
+        - jupyterhub.handlers
+        - jupyterhub.log
+        - jupyterhub.metrics
+        - jupyterhub.oauth
+        - jupyterhub.objects
+        - jupyterhub.orm
+        - jupyterhub.roles
+        - jupyterhub.services
+        - jupyterhub.scopes
+        - jupyterhub.spawner
+        - jupyterhub.tests
+        - jupyterhub.traitlets
+        - jupyterhub.utils
+        - jupyterhub._data
+        - jupyterhub._memoize
+        - jupyterhub._version
       requires:
         - pip
       commands:

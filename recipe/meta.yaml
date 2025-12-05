@@ -118,6 +118,7 @@ outputs:
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - configurable-http-proxy
+        # NodeJS version specified >=12 (node_min in upstream), raising to 18 for security/EOL.
         - nodejs >=18
         - python
     test:

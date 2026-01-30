@@ -77,19 +77,19 @@ outputs:
         - pytest.ini
       requires:
         - pip
-        - pytest >=3.3
-        - pytest-asyncio >=0.17,!=0.23.*
-        - pytest-rerunfailures
-        - requests-mock
-        - virtualenv
-        - beautifulsoup4
-        - cryptography
-        - jsonschema
-        - jupyterlab >=3
+        # - pytest >=3.3
+        # - pytest-asyncio >=0.17,!=0.23.*
+        # - pytest-rerunfailures
+        # - requests-mock
+        # - virtualenv
+        # - beautifulsoup4
+        # - cryptography
+        # - jsonschema
+        #- jupyterlab >=3
         # configurable-http-proxy missing for proxy tests.
-        - configurable-http-proxy
+        #- configurable-http-proxy
         # The nbclassic package provides backward-compatible classic notebook endpoints that these tests expect.
-        - nbclassic
+        #- nbclassic
         # playwright is not available on the main channel
         #- playwright
       commands:

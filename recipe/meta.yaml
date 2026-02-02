@@ -72,9 +72,6 @@ outputs:
         - jupyterhub._data
         - jupyterhub._memoize
         - jupyterhub._version
-      source_files:
-        - jupyterhub/tests
-        - pytest.ini
       requires:
         - pip
         # TODO: Enable tests when playwright is available on the main channel.
@@ -93,6 +90,9 @@ outputs:
         #- nbclassic
         # playwright is not available on the main channel
         #- playwright
+      # source_files:
+      #   - jupyterhub/tests
+      #   - pytest.ini
       commands:
         - pip check
         - python -m jupyterhub --help-all

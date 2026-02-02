@@ -9,7 +9,7 @@ source:
   sha256: acd50f9880c916affe9cddb11be39581fbf5f74971104691f87ef213340d817a
 
 build:
-  number: 0
+  number: 1
   skip: true  # [py<38]
 
 outputs:
@@ -74,6 +74,25 @@ outputs:
         - jupyterhub._version
       requires:
         - pip
+        # TODO: Enable tests when playwright is available on the main channel.
+        # - pytest >=3.3
+        # - pytest-asyncio >=0.17,!=0.23.*
+        # - pytest-rerunfailures
+        # - requests-mock
+        # - virtualenv
+        # - beautifulsoup4
+        # - cryptography
+        # - jsonschema
+        #- jupyterlab >=3
+        # configurable-http-proxy missing for proxy tests.
+        #- configurable-http-proxy
+        # The nbclassic package provides backward-compatible classic notebook endpoints that these tests expect.
+        #- nbclassic
+        # playwright is not available on the main channel
+        #- playwright
+      # source_files:
+      #   - jupyterhub/tests
+      #   - pytest.ini
       commands:
         - pip check
         - python -m jupyterhub --help-all
@@ -89,6 +108,7 @@ outputs:
         - dir %PREFIX%\share\jupyterhub\static\js\home.js                           || exit 1  # [win]
         # Need playwright to run test suite.
         # - pytest -vvv --pyargs jupyterhub.tests
+
   - name: jupyterhub-singleuser
     build:
       skip: true  # [py<38]
@@ -109,6 +129,7 @@ outputs:
       commands:
         - pip check
         - jupyterhub-singleuser --help-all
+
   - name: jupyterhub
     build:
       skip: true  # [py<38]

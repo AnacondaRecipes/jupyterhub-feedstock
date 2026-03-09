@@ -1,19 +1,20 @@
-{% set version = "5.4.2" %}
+{% set name = "jupyterhub" %}
+{% set version = "5.4.3" %}
 
 package:
-  name: jupyterhub-split
+  name: {{ name }}-split
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/j/jupyterhub/jupyterhub-{{ version }}.tar.gz
-  sha256: acd50f9880c916affe9cddb11be39581fbf5f74971104691f87ef213340d817a
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: 2411a3eabe46d53995122ba05a0a0857c5aa228184802b724d99eb43b3faf888
 
 build:
-  number: 1
+  number: 0
   skip: true  # [py<38]
 
 outputs:
-  - name: jupyterhub-base
+  - name: {{ name }}-base
     script: build-base.sh  # [unix]
     script: build-base.bat  # [win]
     build:
@@ -109,7 +110,7 @@ outputs:
         # Need playwright to run test suite.
         # - pytest -vvv --pyargs jupyterhub.tests
 
-  - name: jupyterhub-singleuser
+  - name: {{ name }}-singleuser
     build:
       skip: true  # [py<38]
       entry_points:
@@ -130,7 +131,7 @@ outputs:
         - pip check
         - jupyterhub-singleuser --help-all
 
-  - name: jupyterhub
+  - name: {{ name }}
     build:
       skip: true  # [py<38]
     requirements:

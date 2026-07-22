@@ -1,5 +1,5 @@
 {% set name = "jupyterhub" %}
-{% set version = "5.4.3" %}
+{% set version = "5.5.0" %}
 
 package:
   name: {{ name }}-split
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 2411a3eabe46d53995122ba05a0a0857c5aa228184802b724d99eb43b3faf888
+  sha256: 9b61bcb8175d6c6246f798581cdcac512759865bf53698f7832416f51735d0be
 
 build:
   number: 0
@@ -109,7 +109,6 @@ outputs:
         - dir %PREFIX%\share\jupyterhub\static\js\home.js                           || exit 1  # [win]
         # Need playwright to run test suite.
         # - pytest -vvv --pyargs jupyterhub.tests
-
   - name: {{ name }}-singleuser
     build:
       skip: true  # [py<38]
@@ -130,7 +129,6 @@ outputs:
       commands:
         - pip check
         - jupyterhub-singleuser --help-all
-
   - name: {{ name }}
     build:
       skip: true  # [py<38]

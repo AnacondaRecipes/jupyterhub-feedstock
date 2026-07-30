@@ -1,5 +1,5 @@
 {% set name = "jupyterhub" %}
-{% set version = "5.4.3" %}
+{% set version = "5.5.0" %}
 
 package:
   name: {{ name }}-split
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 2411a3eabe46d53995122ba05a0a0857c5aa228184802b724d99eb43b3faf888
+  sha256: 9b61bcb8175d6c6246f798581cdcac512759865bf53698f7832416f51735d0be
 
 build:
   number: 0
@@ -15,6 +15,8 @@ build:
 
 outputs:
   - name: {{ name }}-base
+    # Platform selectors are used intentionally;
+    # Jinja conditional are not supported by the current linter.
     script: build-base.sh  # [unix]
     script: build-base.bat  # [win]
     build:
@@ -109,7 +111,6 @@ outputs:
         - dir %PREFIX%\share\jupyterhub\static\js\home.js                           || exit 1  # [win]
         # Need playwright to run test suite.
         # - pytest -vvv --pyargs jupyterhub.tests
-
   - name: {{ name }}-singleuser
     build:
       skip: true  # [py<38]
@@ -118,6 +119,7 @@ outputs:
     requirements:
       host:
         - python
+        - setuptools >=61
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - jupyterlab >=3,<5
@@ -130,13 +132,14 @@ outputs:
       commands:
         - pip check
         - jupyterhub-singleuser --help-all
-
+        - jupyter-lab --version
   - name: {{ name }}
     build:
       skip: true  # [py<38]
     requirements:
       host:
         - python
+        - setuptools >=61
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - configurable-http-proxy
@@ -170,3 +173,10 @@ extra:
     - consideRatio
     - manics
     - bollwyvl
+  skip-lints:
+    # pip check is defined for each output;
+    # global tests are ignored in multi-output reccipes.
+    - missing_pip_check
+    # JupiterLab is used as a runtime component;
+    # a CLI smoke test in included instead of launching the GUI.
+    - gui_app

@@ -15,6 +15,8 @@ build:
 
 outputs:
   - name: {{ name }}-base
+    # Platform selectors are used intentionally;
+    # Jinja conditional are not supported by the current linter.
     script: build-base.sh  # [unix]
     script: build-base.bat  # [win]
     build:
@@ -117,6 +119,7 @@ outputs:
     requirements:
       host:
         - python
+        - setuptools >=61
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - jupyterlab >=3,<5
@@ -129,12 +132,14 @@ outputs:
       commands:
         - pip check
         - jupyterhub-singleuser --help-all
+        - jupyter-lab --version
   - name: {{ name }}
     build:
       skip: true  # [py<38]
     requirements:
       host:
         - python
+        - setuptools >=61
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - configurable-http-proxy
@@ -168,3 +173,10 @@ extra:
     - consideRatio
     - manics
     - bollwyvl
+  skip-lints:
+    # pip check is defined for each output;
+    # global tests are ignored in multi-output reccipes.
+    - missing_pip_check
+    # JupiterLab is used as a runtime component;
+    # a CLI smoke test in included instead of launching the GUI.
+    - gui_app

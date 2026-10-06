@@ -1,5 +1,5 @@
 {% set name = "jupyterhub" %}
-{% set version = "5.5.0" %}
+{% set version = "6.0.1" %}
 
 package:
   name: {{ name }}-split
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 9b61bcb8175d6c6246f798581cdcac512759865bf53698f7832416f51735d0be
+  sha256: bafec2f3cfd69cb8b0761986db58ae6d8389fc65a33b2f5ff913276a0300288d
 
 build:
   number: 0

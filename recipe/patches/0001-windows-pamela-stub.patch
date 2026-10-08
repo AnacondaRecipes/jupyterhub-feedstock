@@ -1,0 +1,32 @@
+From 65e6102e69a95126c55a315832484d98cb547d9f Mon Sep 17 00:00:00 2001
+From: Andrii Vetroumov <avetroumov@anaconda.com>
+Date: Thu, 8 Oct 2026 16:35:31 +0300
+Subject: [PATCH] windows pamela stub
+
+---
+ jupyterhub/tests/mocking.py | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/jupyterhub/tests/mocking.py b/jupyterhub/tests/mocking.py
+index ada5b1b3..e75421a9 100644
+--- a/jupyterhub/tests/mocking.py
++++ b/jupyterhub/tests/mocking.py
+@@ -34,7 +34,14 @@ from tempfile import NamedTemporaryFile
+ from unittest import mock
+ from urllib.parse import urlparse
+ 
+-from pamela import PAMError
++# from pamela import PAMError
++try:
++    from pamela import PAMError
++except ImportError:
++    class PAMError(Exception):
++        """Stub PAMError for platforms without pamela (e.g. Windows)"""
++        pass
++
+ from sqlalchemy import event
+ from tornado.httputil import url_concat
+ from traitlets import Bool, Dict, Integer, Unicode, default
+-- 
+2.54.0
+

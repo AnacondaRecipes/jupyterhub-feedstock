@@ -8,6 +8,10 @@ package:
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: bafec2f3cfd69cb8b0761986db58ae6d8389fc65a33b2f5ff913276a0300288d
+  patches:
+    # `pamela` is not available for windows, however mocking.py import it.
+    # This breaks tests for windows, so add fallback mechanism stubbing PAMError only when pamela isn't importable.
+    - patches/0001-windows-pamela-stub.patch  # [win]
 
 build:
   number: 0
@@ -111,7 +115,8 @@ outputs:
         - dir %PREFIX%\share\jupyterhub\static\components\jquery\dist\jquery.min.js || exit 1  # [win]
         - dir %PREFIX%\share\jupyterhub\static\css\style.min.css                    || exit 1  # [win]
         - dir %PREFIX%\share\jupyterhub\static\js\home.js                           || exit 1  # [win]
-        - pytest -vvv --pyargs jupyterhub.tests {{ deselected_tests }}
+        # Tests requres `pamela` which is not available for windows
+        - pytest -vvv --pyargs jupyterhub.tests {{ deselected_tests }}  # [not win]
   - name: {{ name }}-singleuser
     build:
       skip: true  # [py<310]

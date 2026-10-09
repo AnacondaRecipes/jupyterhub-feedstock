@@ -1,5 +1,5 @@
 {% set name = "jupyterhub" %}
-{% set version = "5.5.0" %}
+{% set version = "6.0.1" %}
 
 package:
   name: {{ name }}-split
@@ -7,11 +7,11 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 9b61bcb8175d6c6246f798581cdcac512759865bf53698f7832416f51735d0be
+  sha256: bafec2f3cfd69cb8b0761986db58ae6d8389fc65a33b2f5ff913276a0300288d
 
 build:
   number: 0
-  skip: true  # [py<38]
+  skip: true  # [py<310]
 
 outputs:
   - name: {{ name }}-base
@@ -20,25 +20,24 @@ outputs:
     script: build-base.sh  # [unix]
     script: build-base.bat  # [win]
     build:
-      skip: true  # [py<38]
+      skip: true  # [py<310]
       entry_points:
         - jupyterhub = jupyterhub.app:main
     requirements:
       host:
         - python
         - pip
-        - setuptools >=61
+        - setuptools >=77
         - setuptools_scm
-        - wheel
       run:
         - python
+        - aiodns
+        - aiohttp
         - alembic >=1.4
-        - async_generator >=1.9  # [py<310]
         - certipy >=0.1.2
         - idna
-        - importlib_metadata >=3.6  # [py<310]
         - jinja2 >=2.11.0
-        - jupyter_events
+        - jupyter_events >=0.11.0
         - oauthlib >=3.0
         - packaging
         - pamela >=1.1.0  # [not win]
@@ -48,9 +47,14 @@ outputs:
         - python-dateutil
         - requests
         - sqlalchemy >=1.4.1
-        - tornado >=5.1
-        - traitlets >=4.3.2
+        - tornado >=6.5
+        - traitlets >=5.4
         - pycurl  # tornado uses pycurl by default, if available
+    # configurable-http-proxy >=5.2.0 are needed for this test, which is no in the channel for now,
+    # remove once it will be available
+    {% set deselected_tests = "--deselect=test_unix_socket.py::test_unix_socket_proxy" %}
+    # cannot resolve IP in conda environment
+    {% set deselected_tests = deselected_tests + " --deselect=test_proxy.py::test_proxy_bind_ip" %}
     test:
       imports:
         - jupyterhub
@@ -77,25 +81,23 @@ outputs:
         - jupyterhub._version
       requires:
         - pip
-        # TODO: Enable tests when playwright is available on the main channel.
-        # - pytest >=3.3
-        # - pytest-asyncio >=0.17,!=0.23.*
-        # - pytest-rerunfailures
-        # - requests-mock
-        # - virtualenv
-        # - beautifulsoup4
-        # - cryptography
-        # - jsonschema
-        #- jupyterlab >=3
+        - pytest >=3.3
+        - pytest-asyncio >=0.17,!=0.23.*
+        - pytest-rerunfailures
+        - requests-mock
+        - virtualenv
+        - beautifulsoup4
+        - cryptography
+        - jsonschema
+        - jupyterlab >=3
         # configurable-http-proxy missing for proxy tests.
-        #- configurable-http-proxy
+        - configurable-http-proxy >=5.1.0
         # The nbclassic package provides backward-compatible classic notebook endpoints that these tests expect.
-        #- nbclassic
-        # playwright is not available on the main channel
-        #- playwright
-      # source_files:
-      #   - jupyterhub/tests
-      #   - pytest.ini
+        - nbclassic
+        - playwright-python
+      source_files:
+        - jupyterhub/tests
+        - pytest.ini
       commands:
         - pip check
         - python -m jupyterhub --help-all
@@ -109,17 +111,17 @@ outputs:
         - dir %PREFIX%\share\jupyterhub\static\components\jquery\dist\jquery.min.js || exit 1  # [win]
         - dir %PREFIX%\share\jupyterhub\static\css\style.min.css                    || exit 1  # [win]
         - dir %PREFIX%\share\jupyterhub\static\js\home.js                           || exit 1  # [win]
-        # Need playwright to run test suite.
-        # - pytest -vvv --pyargs jupyterhub.tests
+        # Tests requres `pamela` which is not available for windows
+        - pytest -vvv --pyargs jupyterhub.tests {{ deselected_tests }}  # [not win]
   - name: {{ name }}-singleuser
     build:
-      skip: true  # [py<38]
+      skip: true  # [py<310]
       entry_points:
         - jupyterhub-singleuser = jupyterhub.singleuser:main
     requirements:
       host:
         - python
-        - setuptools >=61
+        - setuptools >=77
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - jupyterlab >=3,<5
@@ -135,11 +137,11 @@ outputs:
         - jupyter-lab --version
   - name: {{ name }}
     build:
-      skip: true  # [py<38]
+      skip: true  # [py<310]
     requirements:
       host:
         - python
-        - setuptools >=61
+        - setuptools >=77
       run:
         - {{ pin_subpackage("jupyterhub-base", exact=True) }}
         - configurable-http-proxy

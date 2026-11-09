@@ -1,7 +1,7 @@
 {% set name = "jupyterhub" %}
 {% set version = "6.1.1" %}
 {% set deselected_tests = "--deselect=test_unix_socket.py::test_unix_socket_proxy" %}
-{% set deselected_tests = 'deselected_tests + " --deselect=test_proxy.py::test_proxy_bind_ip"' %}
+{% set deselected_tests = deselected_tests + " --deselect=test_proxy.py::test_proxy_bind_ip" %}
 
 package:
   name: {{ name }}-split

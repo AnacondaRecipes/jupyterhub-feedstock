@@ -1,7 +1,5 @@
 {% set name = "jupyterhub" %}
 {% set version = "6.1.1" %}
-{% set deselected_tests = "--deselect=test_unix_socket.py::test_unix_socket_proxy" %}
-{% set deselected_tests = deselected_tests + " --deselect=test_proxy.py::test_proxy_bind_ip" %}
 
 package:
   name: {{ name }}-split
@@ -54,7 +52,9 @@ outputs:
         - pycurl  # tornado uses pycurl by default, if available
     # configurable-http-proxy >=5.2.0 are needed for this test, which is no in the channel for now,
     # remove once it will be available
+    {% set deselected_tests = "--deselect=test_unix_socket.py::test_unix_socket_proxy" %}
     # cannot resolve IP in conda environment
+    {% set deselected_tests = deselected_tests + " --deselect=test_proxy.py::test_proxy_bind_ip" %}
     test:
       imports:
         - jupyterhub
